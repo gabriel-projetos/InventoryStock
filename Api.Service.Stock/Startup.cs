@@ -58,6 +58,9 @@ namespace Api.Service.Stock
 #endif
                 });
             }
+
+            AppDomain.CurrentDomain.GetAssemblies().ToList()
+                .ForEach(a => DependencyInjection.Setup(builder, a));
         }
     }
 }

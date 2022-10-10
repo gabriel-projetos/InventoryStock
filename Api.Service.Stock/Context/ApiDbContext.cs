@@ -1,4 +1,5 @@
 ﻿using Api.Service.Stock.Models;
+using Interface.Models;
 using Interfaces.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
@@ -29,6 +30,7 @@ namespace Api.Service.Stock.Context
         public virtual DbSet<Venda> Vendas { get; set; }
         public virtual DbSet<TipoPagamento> TipoPagamentos { get; set; }
         public virtual DbSet<ItensVenda> ItensVendas { get; set; }
+        public virtual DbSet<CourseUserRegister> CourseUserRegisters { get; set; }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -65,7 +67,8 @@ namespace Api.Service.Stock.Context
 
             DefaultModelV2Setup<Cliente>(modelBuilder);
             modelBuilder.Entity<Cliente>().HasIndex(m => m.Uid).IsUnique();
-            
+            modelBuilder.Entity<Cliente>().ToTable(e => e.IsTemporal());
+
             DefaultModelV2Setup<Venda>(modelBuilder);
             modelBuilder.Entity<Venda>().HasIndex(m => m.Uid).IsUnique();
             modelBuilder.Entity<Venda>().HasOne(d => d.DbCliente)
@@ -88,6 +91,12 @@ namespace Api.Service.Stock.Context
                 .HasForeignKey(d => d.VendaUid)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
+            DefaultModelV2Setup<CourseUserRegister>(modelBuilder);
+            modelBuilder.Entity<CourseUserRegister>().ToTable(e => e.IsTemporal());
+            modelBuilder.Entity<CourseUserRegister>().Property(p => p.AccessStatus).HasConversion(new EnumToStringConverter<ContentStatus>()).HasMaxLength(50);
+            modelBuilder.Entity<CourseUserRegister>().Property(p => p.RegisterStatus).HasConversion(new EnumToStringConverter<UserRegisterStatus>()).HasMaxLength(50);
+            modelBuilder.Entity<CourseUserRegister>().HasIndex(m => new { m.DbRegisterUid, m.UserUid }).IsUnique();
+            modelBuilder.Entity<CourseUserRegister>().HasIndex(m => m.UserUid).IncludeProperties(p => new { p.AccessStatus, p.RegisterStatus, p.CreatedAt, p.DbRegisterUid });
         }
 
 
