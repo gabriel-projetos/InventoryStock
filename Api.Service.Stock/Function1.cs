@@ -7,6 +7,10 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.EntityFrameworkCore;
 
 namespace Api.Service.Stock
 {
@@ -30,6 +34,51 @@ namespace Api.Service.Stock
                 : $"Hello, {name}. This HTTP triggered function executed successfully.";
 
             return new OkObjectResult(responseMessage);
+        }
+
+        [FunctionName("CheckApplication")]
+        public static async Task CheckApplication([TimerTrigger("0 0 * * * *", RunOnStartup = true, UseMonitor = false)] TimerInfo myTimer, ILogger log)
+        {
+            var factors = FindAllAssignableFrom<IDesignTimeDbContextFactory<DbContext>>();
+
+            foreach (var type in factors)
+            {
+                try
+                {
+                    var instance = Activator.CreateInstance(type) as IDesignTimeDbContextFactory<DbContext>;
+                    if (instance == null) continue;
+
+                    var context = instance.CreateDbContext(new string[0]);
+                    var pending = await context.Database.GetPendingMigrationsAsync().ConfigureAwait(false);
+
+                    if (pending.Count() == 0) continue;
+
+                    await context.Database.MigrateAsync().ConfigureAwait(false);
+                }
+                catch (Exception e)
+                {
+                    var message = e.ToString();
+                    if (message.Contains("Value cannot be null. (Parameter 'connectionString')") == false)
+                    {
+                        log.LogError(e.ToString());
+                    }
+                }
+
+
+            }
+        }
+
+        public static List<Type> FindAllAssignableFrom<T>() where T : class
+        {
+            var result = AppDomain.CurrentDomain.GetAssemblies().ToList()
+                .SelectMany(p => p.DefinedTypes
+                    .ToList()
+                    .FindAll(t => t.IsAbstract == false && typeof(T)
+                    .IsAssignableFrom(t.AsType()))
+                    .Select(t => t.AsType()))
+                .ToList();
+
+            return result;
         }
     }
 }
