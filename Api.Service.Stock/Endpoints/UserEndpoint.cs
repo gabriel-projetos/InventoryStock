@@ -69,9 +69,9 @@ namespace Api.Service.Stock.Endpoints
            [HttpTrigger(AuthorizationLevel.Function, "delete", Route = "user/registers")] HttpRequest req,
            ILogger log)
         {
-            var resultt = await UserService.Get();
+            var result = await UserService.Get();
 
-            return new OkObjectResult(resultt);
+            return new OkObjectResult(result);
         }
     }
 }
