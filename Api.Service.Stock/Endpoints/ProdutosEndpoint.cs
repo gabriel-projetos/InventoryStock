@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Api.Service.Stock.Endpoints
 {
-    internal class ProdutosEndpoint
+    public class ProdutosEndpoint
     {
     }
 }

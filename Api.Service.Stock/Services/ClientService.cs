@@ -8,20 +8,21 @@ using System.Threading.Tasks;
 
 namespace Api.Service.Stock.Services
 {
+    //[Ioc(Interface = typeof(ClientService))]
     public class ClientService
     {
-        private ApiDbContext Context { get; set; }
+        //private SharedDbContext Context { get; set; }
 
-        public ClientService(ApiDbContext context)
-        {
-            Context = context;
-        }
+        //public ClientService(SharedDbContext context)
+        //{
+        //    Context = context;
+        //}
 
         
         public void InsertClient(Cliente client)
         {
-            Context.Clientes.Add(client);
-            Context.SaveChanges();
+            //Context.Clientes.Add(client);
+            //Context.SaveChanges();
         }
     }
 }

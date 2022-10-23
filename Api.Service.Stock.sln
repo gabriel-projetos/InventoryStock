@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Service.Stock", "Api.Service.Stock\Api.Service.Stock.csproj", "{62A5A90D-95A0-4710-95AD-6D4D65BA0EB2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api.Service.Stock", "Api.Service.Stock\Api.Service.Stock.csproj", "{62A5A90D-95A0-4710-95AD-6D4D65BA0EB2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interface", "Interface\Interface.csproj", "{A3DB3008-F779-43FB-9C9E-E2AFF25B261E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Interface", "Interface\Interface.csproj", "{A3DB3008-F779-43FB-9C9E-E2AFF25B261E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonModels", "CommonModels\CommonModels.csproj", "{576AB748-38C3-4E26-82D5-A62A84D1C1A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonModels", "CommonModels\CommonModels.csproj", "{576AB748-38C3-4E26-82D5-A62A84D1C1A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
