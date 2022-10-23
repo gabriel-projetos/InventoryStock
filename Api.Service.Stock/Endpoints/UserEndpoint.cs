@@ -26,52 +26,52 @@ namespace Api.Service.Stock.Endpoints
             UserService = userService;
         }
 
-        [FunctionName("GetUserRegisters")]
-        public async Task<IActionResult> GetUserRegisters(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "user/registers")] HttpRequest req,
-            ILogger log)
-        {
-            var result = await UserService.Get();
+        //[FunctionName("GetUserRegisters")]
+        //public async Task<IActionResult> GetUserRegisters(
+        //    [HttpTrigger(AuthorizationLevel.Function, "get", Route = "user/registers")] HttpRequest req,
+        //    ILogger log)
+        //{
+        //    var result = await UserService.Get();
 
-            return new OkObjectResult(result);
-        }
+        //    return new OkObjectResult(result);
+        //}
 
-        [FunctionName("InsertUserRegisters")]
-        public async Task<IActionResult> InsertUserRegisters(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = "user/registers")] HttpRequest req,
-            ILogger log)
-        {
-            var user = await req.BodyDeserialize<CourseUserRegister>();
-            var result = await UserService.Insert(user);
+        //[FunctionName("InsertUserRegisters")]
+        //public async Task<IActionResult> InsertUserRegisters(
+        //    [HttpTrigger(AuthorizationLevel.Function, "post", Route = "user/registers")] HttpRequest req,
+        //    ILogger log)
+        //{
+        //    var user = await req.BodyDeserialize<CourseUserRegister>();
+        //    var result = await UserService.Insert(user);
 
-            return new OkObjectResult(result);
-        }
+        //    return new OkObjectResult(result);
+        //}
 
-        [FunctionName("PutUserRegisters")]
-        public async Task<IActionResult> PutUserRegisters(
-           [HttpTrigger(AuthorizationLevel.Function, "put", Route = "user/registers/{userUid}")] HttpRequest req,
-           Guid userUid,
-           ILogger log)
-        {
-            var userModel = await UserService.Get(userUid, new UserService.UserRegisterOptions());
+        //[FunctionName("PutUserRegisters")]
+        //public async Task<IActionResult> PutUserRegisters(
+        //   [HttpTrigger(AuthorizationLevel.Function, "put", Route = "user/registers/{userUid}")] HttpRequest req,
+        //   Guid userUid,
+        //   ILogger log)
+        //{
+        //    var userModel = await UserService.Get(userUid, new UserService.UserRegisterOptions());
 
-            var json = await req.BodyAsString();
-            JsonConvert.PopulateObject(json, userModel);
+        //    var json = await req.BodyAsString();
+        //    JsonConvert.PopulateObject(json, userModel);
 
 
-            var result = await UserService.Update(userModel);
+        //    var result = await UserService.Update(userModel);
 
-            return new OkObjectResult(result);
-        }
+        //    return new OkObjectResult(result);
+        //}
 
-        [FunctionName("DeleteUserRegisters")]
-        public async Task<IActionResult> DeleteUserRegisters(
-           [HttpTrigger(AuthorizationLevel.Function, "delete", Route = "user/registers")] HttpRequest req,
-           ILogger log)
-        {
-            var result = await UserService.Get();
+        //[FunctionName("DeleteUserRegisters")]
+        //public async Task<IActionResult> DeleteUserRegisters(
+        //   [HttpTrigger(AuthorizationLevel.Function, "delete", Route = "user/registers")] HttpRequest req,
+        //   ILogger log)
+        //{
+        //    var result = await UserService.Get();
 
-            return new OkObjectResult(result);
-        }
+        //    return new OkObjectResult(result);
+        //}
     }
 }

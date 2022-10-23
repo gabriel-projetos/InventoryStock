@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Api.Service.Stock.Migrations
+namespace Api.Service.Stock.Data.Migrations.MsSql
 {
-    [DbContext(typeof(ApiDbContext))]
-    [Migration("20221002205533_nova tabela tipopagamento")]
-    partial class novatabelatipopagamento
+    [DbContext(typeof(MsSqlDbContext))]
+    [Migration("20221023185956_InitialDbMsSql")]
+    partial class InitialDbMsSql
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -55,6 +55,16 @@ namespace Api.Service.Stock.Migrations
                     b.Property<string>("Nome")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("PeriodEnd")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("PeriodEnd");
+
+                    b.Property<DateTime>("PeriodStart")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("PeriodStart");
+
                     b.Property<string>("Rg")
                         .HasColumnType("nvarchar(max)");
 
@@ -70,6 +80,17 @@ namespace Api.Service.Stock.Migrations
                         .IsUnique();
 
                     b.ToTable("Clientes");
+
+                    b.ToTable(tb => tb.IsTemporal(ttb =>
+                        {
+                            ttb
+                                .HasPeriodStart("PeriodStart")
+                                .HasColumnName("PeriodStart");
+                            ttb
+                                .HasPeriodEnd("PeriodEnd")
+                                .HasColumnName("PeriodEnd");
+                        }
+                    ));
                 });
 
             modelBuilder.Entity("Api.Service.Stock.Models.Compra", b =>
@@ -201,6 +222,40 @@ namespace Api.Service.Stock.Migrations
                         .IsUnique();
 
                     b.ToTable("ItensCompras");
+                });
+
+            modelBuilder.Entity("Api.Service.Stock.Models.ItensVenda", b =>
+                {
+                    b.Property<Guid>("Uid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ProdutoUid")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double?>("Quantidade")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal?>("Valor")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("VendaUid")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Uid");
+
+                    b.HasIndex("ProdutoUid");
+
+                    b.HasIndex("VendaUid");
+
+                    b.ToTable("ItensVendas");
                 });
 
             modelBuilder.Entity("Api.Service.Stock.Models.Produto", b =>
@@ -348,6 +403,23 @@ namespace Api.Service.Stock.Migrations
                     b.Navigation("DbProduto");
                 });
 
+            modelBuilder.Entity("Api.Service.Stock.Models.ItensVenda", b =>
+                {
+                    b.HasOne("Api.Service.Stock.Models.Produto", "DbProduto")
+                        .WithMany("DbItensVendasModel")
+                        .HasForeignKey("ProdutoUid")
+                        .IsRequired();
+
+                    b.HasOne("Api.Service.Stock.Models.Venda", "DbVenda")
+                        .WithMany("DbItensVendasModel")
+                        .HasForeignKey("VendaUid")
+                        .IsRequired();
+
+                    b.Navigation("DbProduto");
+
+                    b.Navigation("DbVenda");
+                });
+
             modelBuilder.Entity("Api.Service.Stock.Models.Venda", b =>
                 {
                     b.HasOne("Api.Service.Stock.Models.Cliente", "DbCliente")
@@ -383,6 +455,8 @@ namespace Api.Service.Stock.Migrations
             modelBuilder.Entity("Api.Service.Stock.Models.Produto", b =>
                 {
                     b.Navigation("DbItensCompraModel");
+
+                    b.Navigation("DbItensVendasModel");
                 });
 
             modelBuilder.Entity("Api.Service.Stock.Models.TipoPagamento", b =>
@@ -390,6 +464,11 @@ namespace Api.Service.Stock.Migrations
                     b.Navigation("DbComprasModel");
 
                     b.Navigation("DbVendasModel");
+                });
+
+            modelBuilder.Entity("Api.Service.Stock.Models.Venda", b =>
+                {
+                    b.Navigation("DbItensVendasModel");
                 });
 #pragma warning restore 612, 618
         }

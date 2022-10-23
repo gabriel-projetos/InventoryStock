@@ -41,23 +41,49 @@ namespace Api.Service.Stock
                .AddEnvironmentVariables()
                .Build();
 
-            // ConnectionString cadastrado em host/local.json utilizado para conectar ao banco.
-            var sqlConnection = config.GetConnectionStringOrSetting("SqlConnectionString");
-
-            // Caso exista a configuração de conexão com o banco, o contexto de banco é configurado. 
-            if (!string.IsNullOrEmpty(sqlConnection))
+            if (config.GetValue<bool>("UseInMemoryDatabase"))
             {
-                builder.Services.AddDbContextPool<ApiDbContext>(options =>
-                {
-                    options.UseSqlServer(sqlConnection);
-                    options.EnableDetailedErrors(true);
-#if DEBUG
-                    options.UseQueryTrackingBehavior(QueryTrackingBehavior.TrackAll);
-                    options.EnableSensitiveDataLogging(true);
-                    options.UseLoggerFactory(MyLoggerFactory);
-#endif
-                });
+                builder.Services.AddDbContext<SharedDbContext>(options =>
+                    options.UseInMemoryDatabase("ApplicationDb"));
             }
+            else
+            {
+
+                switch (config.GetConnectionStringOrSetting("DatabaseProvider"))
+                {
+                    case "MsSql":
+                        // ConnectionString cadastrado em host/local.json utilizado para conectar ao banco.
+                        var msSqlConnection = config.GetConnectionStringOrSetting("MsSqlConnection");
+
+                        // Caso exista a configuração de conexão com o banco, o contexto de banco é configurado. 
+                        if (!string.IsNullOrEmpty(msSqlConnection))
+                        {
+                            builder.Services.AddDbContext<SharedDbContext, MsSqlDbContext>();
+                        }
+                        break;
+
+                    case "OracleConnection":
+                        var oracleSqlConnection = config.GetConnectionStringOrSetting("OracleConnection");
+
+                        if (!string.IsNullOrEmpty(oracleSqlConnection))
+                        {
+                            builder.Services.AddDbContext<SharedDbContext, OracleDbContext>(options =>
+                            {
+                                options.UseOracle(oracleSqlConnection, b => b.UseOracleSQLCompatibility("11"));
+#if DEBUG
+                                options.UseQueryTrackingBehavior(QueryTrackingBehavior.TrackAll);
+                                options.EnableSensitiveDataLogging(true);
+                                options.UseLoggerFactory(MyLoggerFactory);
+#endif
+                            });
+                        };
+                        
+                    break;
+                }
+            }
+
+
+            
 
             AppDomain.CurrentDomain.GetAssemblies().ToList()
                 .ForEach(a => DependencyInjection.Setup(builder, a));

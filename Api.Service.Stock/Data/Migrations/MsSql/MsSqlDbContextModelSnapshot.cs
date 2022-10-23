@@ -4,18 +4,16 @@ using Api.Service.Stock.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Api.Service.Stock.Migrations
+namespace Api.Service.Stock.Data.Migrations.MsSql
 {
-    [DbContext(typeof(ApiDbContext))]
-    [Migration("20221010015620_nova tabela user registers temporal")]
-    partial class novatabelauserregisterstemporal
+    [DbContext(typeof(MsSqlDbContext))]
+    partial class MsSqlDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -131,71 +129,6 @@ namespace Api.Service.Stock.Migrations
                         .IsUnique();
 
                     b.ToTable("Compras");
-                });
-
-            modelBuilder.Entity("Api.Service.Stock.Models.CourseUserRegister", b =>
-                {
-                    b.Property<Guid>("Uid")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
-
-                    b.Property<string>("AccessStatus")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime?>("CompletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("DbRegisterUid")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("PeriodEnd")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2")
-                        .HasColumnName("PeriodEnd");
-
-                    b.Property<DateTime>("PeriodStart")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2")
-                        .HasColumnName("PeriodStart");
-
-                    b.Property<string>("RegisterStatus")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("UserUid")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Uid");
-
-                    b.HasIndex("UserUid");
-
-                    SqlServerIndexBuilderExtensions.IncludeProperties(b.HasIndex("UserUid"), new[] { "AccessStatus", "RegisterStatus", "CreatedAt", "DbRegisterUid" });
-
-                    b.HasIndex("DbRegisterUid", "UserUid")
-                        .IsUnique();
-
-                    b.ToTable("CourseUserRegisters");
-
-                    b.ToTable(tb => tb.IsTemporal(ttb =>
-                        {
-                            ttb
-                                .HasPeriodStart("PeriodStart")
-                                .HasColumnName("PeriodStart");
-                            ttb
-                                .HasPeriodEnd("PeriodEnd")
-                                .HasColumnName("PeriodEnd");
-                        }
-                    ));
                 });
 
             modelBuilder.Entity("Api.Service.Stock.Models.Fornecedor", b =>
