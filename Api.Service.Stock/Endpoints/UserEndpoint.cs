@@ -19,12 +19,12 @@ namespace Api.Service.Stock.Endpoints
     
     internal class UserEndpoint
     {
-        private UserService UserService { get; }
+        //private UserService UserService { get; }
 
-        public UserEndpoint(UserService userService)
-        {
-            UserService = userService;
-        }
+        //public UserEndpoint(UserService userService)
+        //{
+        //    UserService = userService;
+        //}
 
         //[FunctionName("GetUserRegisters")]
         //public async Task<IActionResult> GetUserRegisters(
