@@ -70,6 +70,7 @@ namespace Api.Service.Stock
                             builder.Services.AddDbContext<SharedDbContext, OracleDbContext>(options =>
                             {
                                 //options.UseOracle(oracleSqlConnection, b => b.UseOracleSQLCompatibility("11"));
+                                //
 #if DEBUG
                                 options.UseQueryTrackingBehavior(QueryTrackingBehavior.TrackAll);
                                 options.EnableSensitiveDataLogging(true);
