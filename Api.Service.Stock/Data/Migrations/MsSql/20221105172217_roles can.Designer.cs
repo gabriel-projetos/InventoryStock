@@ -4,6 +4,7 @@ using Api.Service.Stock.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Service.Stock.Data.Migrations.MsSql
 {
     [DbContext(typeof(MsSqlDbContext))]
-    partial class MsSqlDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221105172217_roles can")]
+    partial class rolescan
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

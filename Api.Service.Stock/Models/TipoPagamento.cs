@@ -20,6 +20,12 @@ namespace Api.Service.Stock.Models
         public virtual List<IVenda> Vendas => new List<IVenda>(DbVendasModel);
 
         public List<Venda> DbVendasModel { get; set; }
-        
+
+        public RoleType RolesCanRead { get; set; }
+
+        internal object Select(Func<object, object> value)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

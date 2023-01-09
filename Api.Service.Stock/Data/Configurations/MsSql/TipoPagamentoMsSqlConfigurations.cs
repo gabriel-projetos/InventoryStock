@@ -1,7 +1,9 @@
 ﻿using Api.Service.Stock.Models;
 using Api.Service.Stock.Utility;
+using Interfaces.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +18,7 @@ namespace Api.Service.Stock.Data.Configurations.MsSql
         {
             DefaultModelSetup.DefaultModelV2Setup(modelBuilder);
             modelBuilder.HasIndex(m => m.Uid).IsUnique();
+            modelBuilder.Property(m => m.RolesCanRead).HasConversion(new EnumToStringConverter<RoleType>()).HasMaxLength(150);
         }
     }
 }

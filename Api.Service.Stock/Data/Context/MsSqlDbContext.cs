@@ -12,7 +12,7 @@ namespace Api.Service.Stock.Context
 {
     public class MsSqlDbContext : SharedDbContext
     {
-        public static readonly ILoggerFactory MyLoggerFactory = LoggerFactory.Create(builder => { builder.AddConsole(); });
+       // public static readonly ILoggerFactory MyLoggerFactory = LoggerFactory.Create(builder => { builder.AddConsole(); });
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
@@ -28,7 +28,7 @@ namespace Api.Service.Stock.Context
 #if DEBUG
             options.UseQueryTrackingBehavior(QueryTrackingBehavior.TrackAll);
             options.EnableSensitiveDataLogging(true);
-            options.UseLoggerFactory(MyLoggerFactory);
+            //options.UseLoggerFactory(MyLoggerFactory);
 #endif
         }
 

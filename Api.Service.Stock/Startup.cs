@@ -69,7 +69,7 @@ namespace Api.Service.Stock
                         {
                             builder.Services.AddDbContext<SharedDbContext, OracleDbContext>(options =>
                             {
-                                options.UseOracle(oracleSqlConnection, b => b.UseOracleSQLCompatibility("11"));
+                                //options.UseOracle(oracleSqlConnection, b => b.UseOracleSQLCompatibility("11"));
 #if DEBUG
                                 options.UseQueryTrackingBehavior(QueryTrackingBehavior.TrackAll);
                                 options.EnableSensitiveDataLogging(true);
@@ -81,10 +81,6 @@ namespace Api.Service.Stock
                     break;
                 }
             }
-
-
-            
-
             AppDomain.CurrentDomain.GetAssemblies().ToList()
                 .ForEach(a => DependencyInjection.Setup(builder, a));
         }
